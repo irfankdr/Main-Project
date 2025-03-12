@@ -1,0 +1,42 @@
+{% extends "staff/staff_index.html" %}
+{% block body %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+</head>
+
+<body><form action="" method="get"></form>
+<table border="1"  class="table table-bordered">
+  <tr style="color: white;background-color: #f82249">
+    <th scope="col">SL.NO</th>
+    <th scope="col">WORK</th>
+    <th scope="col">STATUS</th>
+    <th scope="col">ACTION</th>
+
+
+  </tr>
+    {% for v in data %}
+  <tr>
+    <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.works }}</td>
+    <td> {{ v.status }}</td>
+      {% if v.status == 'pending' %}
+    <td> <a href="/update_work_status/{{ v.id }}" class="btn btn-outline-dark">Update Status</a> </td>
+  {% else %}
+  <td>Work Completed</td>
+  {% endif %}
+
+
+
+
+
+  </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+{% endblock %}

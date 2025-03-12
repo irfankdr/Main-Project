@@ -1,0 +1,42 @@
+{% extends "event_organiser/organiser_index.html" %}
+{% block body %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+</head>
+
+<body><form action="" method="get"></form>
+<table border="1"  class="table table-bordered">
+  <tr style="color: white;background-color: #f82249">
+    <th scope="col">SL.NO</th>
+    <th scope="col">NAME</th>
+    <th scope="col">EMAIL</th>
+    <th scope="col">CONTACT</th>
+    <th scope="col">PLACE</th>
+    <th scope="col">LOCATION</th>
+    <th scope="col">ACTIONS</th>
+  </tr>
+    {% for v in data %}
+  <tr>
+    <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.name }}</td>
+    <td>{{ v.email }}&nbsp;</td>
+    <td>{{ v.contact }}&nbsp;</td>
+
+    <td>{{ v.place }}</td>
+    <td><a href="https://www.google.com/maps/?q={{ v.latitude }},{{ v.longitude }}" class="btn btn-outline-dark">Track</a></td>
+    <td><a href="/edit_college/{{ v.id }}#aaa" class="btn btn-outline-dark">Update</a><br><br>
+    <a href="/delete_college/{{ v.id }}" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a>
+
+
+    </td>
+
+  </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+{% endblock %}

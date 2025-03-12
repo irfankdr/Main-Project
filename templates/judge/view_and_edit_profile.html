@@ -1,0 +1,49 @@
+{% extends "judge/judge_index.html" %}
+{% block body %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<form id="form1" name="form1" method="post" action="/judge_view_and_edit_profile_post">
+  <table width="200" border="1" class="table table-dark">
+    <tr>
+
+    <tr>
+      <th scope="row">Name</th>
+      <td>
+      <input type="text" name="textfield3" id="textfield3" value="{{ data.name }}" pattern="[A-Za-z ]*" class="form-control" required /></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Email</th>
+      <td>
+      <input type="email" name="textfield4" id="textfield4" value="{{ data.email }}" class="form-control" required /></td>
+    </tr>
+      <tr>
+      <th scope="row">Contact</th>
+      <td>
+      <input type="text" name="textfield5" id="textfield4" pattern="[6-9][0-9{9}" value="{{ data.contact }}" class="form-control" required/></td>
+    </tr>
+      <tr>
+      <th scope="row">Expertise</th>
+      <td>
+      <input type="text" name="textfield6" id="textfield4" value="{{ data.expertise }}" class="form-control" required /></td>
+    </tr>
+      <tr>
+      <th scope="row">Designation</th>
+      <td>
+      <input type="text" name="textfield7" id="textfield4" value="{{ data.designation }}" class="form-control" required /></td>
+    </tr>
+    <tr>
+        <th colspan="2" scope="row"><div align="center"><input type="submit" name="button" id="button" value="Update" class="btn btn-danger" /></div></th>
+    </tr>
+  </table>
+</form>
+</body>
+</html>
+{% endblock %}

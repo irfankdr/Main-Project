@@ -1,0 +1,130 @@
+{% extends "event_organiser/organiser_index.html" %}
+{% block body %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<form id="form1" name="form1" method="post" action="/edit_program_post/{{ data.id }}">
+  <table width="200" border="1" class="table table-dark">
+    <tr>
+      <th scope="row">Starttime</th>
+      <td>
+      <input type="text" name="textfield" id="textfield" value="{{ data.start_time }}" class="form-control" required /></td>
+    </tr>
+    <tr>
+      <th scope="row">End Time</th>
+      <td>
+      <input type="text" name="textfield2" id="textfield2" value="{{ data.end_time }}" class="form-control" required /></td>
+    </tr>
+    <tr>
+      <th scope="row">Name</th>
+      <td>
+      <input type="text" name="textfield3" id="textfield3" value="{{ data.name }}" class="form-control" required  /></td>
+    </tr>
+    <tr>
+      <th scope="row">Description</th>
+      <td>
+      <textarea name="textarea" id="textarea" cols="45" rows="5" class="form-control" required>{{ data.description }}</textarea></td>
+    </tr>
+    <tr>
+      <th scope="row">Category</th>
+      <td>
+      <input type="text" name="textfield4" id="textfield4" class="form-control" required value="{{ data.category }}"  /></td>
+    </tr>
+      <tr>
+      <th scope="row">Rounds</th>
+      <td>
+      <input type="text" name="textfield5" id="textfield4" class="form-control" required value="{{ data.rounds }}"  /></td>
+    </tr>
+      <tr>
+      <th scope="row">Date</th>
+      <td>
+      <input type="text" name="textfield6" id="textfield4"class="form-control" required value="{{ data.date }}"  /></td>
+    </tr>
+      <tr>
+      <th scope="row">Stage No</th>
+      <td>
+      <input type="number" name="textfield6" id="textfield4" class="form-control" required /></td>
+    </tr>
+       <tr>
+      <th scope="row">Stage Latitude</th>
+      <td>
+      <input type="text" name="textfield7" id="lt" class="form-control" readonly /></td>
+    </tr>
+       <tr>
+      <th scope="row">Stage Longitude</th>
+      <td>
+      <input type="text" name="textfield8" id="lg" class="form-control" readonly /></td>
+    </tr>
+      <tr>
+          <td id="gmap" colspan="2"></td>
+      </tr>
+    <tr>
+        <th colspan="2" scope="row"><div align="center"> <input type="submit" name="button" id="button" value="Edit" class="btn btn-danger" /></div></th>
+    </tr>
+  </table>
+</form>
+</body>
+</html>
+
+    <style type="text/css">
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0 }
+#gmap { width: 100%; height: 300px; border: double; }
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&sensor=false"></script>
+<script type="text/javascript">
+var map, marker;
+initialize()
+function initialize() {
+    var myLatlng = new google.maps.LatLng(11.868536, 75.363197);
+    var myOptions = {
+        zoom: 7,
+        center: myLatlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("gmap"), myOptions);
+    marker = new google.maps.Marker({
+        position: myLatlng,
+        map: map
+    });
+
+    google.maps.event.addListener(map, "click", function(event) {
+        var clickLat = event.latLng.lat();
+        var clickLon = event.latLng.lng();
+        document.getElementById("lt").value = clickLat.toFixed(5);
+        document.getElementById("lg").value = clickLon.toFixed(5);
+        marker.setPosition(new google.maps.LatLng(clickLat, clickLon));
+    });
+
+    GetMylocation();
+}
+
+function GetMylocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+    document.getElementById("lt").value = lat;
+    document.getElementById("lg").value = lon;
+
+    var myLatlng = new google.maps.LatLng(lat, lon);
+    map.setCenter(myLatlng);
+    map.setZoom(14);
+    marker.setPosition(myLatlng);
+}
+</script>
+
+{% endblock %}

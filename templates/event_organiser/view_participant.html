@@ -1,0 +1,41 @@
+{% extends "event_organiser/organiser_index.html" %}
+{% block body %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+</head>
+
+<body><form action="" method="get"></form>
+<table border="1"  class="table table-bordered">
+  <tr style="color: white;background-color: #f82249">
+    <th scope="col">SL.NO</th>
+    <th scope="col">NAME</th>
+    <th scope="col">EMAIL</th>
+    <th scope="col">CONTACT</th>
+    <th scope="col">LICENSE NO</th>
+    <th scope="col">PLACE</th>
+    <th scope="col"></th>
+  </tr>
+    {% for v in data %}
+  <tr>
+    <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.name }}</td>
+    <td>{{ v.email }}&nbsp;</td>
+    <td>{{ v.contact }}&nbsp;</td>
+
+    <td>{{ v.place }}</td>
+  <td>
+    <a href="https://www.google.com/maps/?q={{ i.lattitude }} , {{ i.longitude }}" style="width:100px;" class="btn btn-danger">Locate</a><br><br>
+    <a href="/review/{{ v.id }}#abc" class="btn btn-danger" style="width:120px;">View Rating</a>
+
+  </td>
+  </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+{% endblock %}

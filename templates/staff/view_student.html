@@ -1,0 +1,48 @@
+{% extends "staff/staff_index.html" %}
+{% block body %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+</head>
+
+<body><form action="" method="get"></form>
+<table border="1"  class="table table-bordered">
+  <tr style="color: white;background-color: #f82249">
+    <th scope="col">SL.NO</th>
+    <th scope="col">NAME</th>
+    <th scope="col">EMAIL</th>
+    <th scope="col">CONTACT</th>
+    <th scope="col">IMAGE</th>
+    <th scope="col">PLACE</th>
+    <th scope="col">YEAR</th>
+    <th scope="col" colspan="2">ACTIONS</th>
+  </tr>
+    {% for v in data %}
+  <tr>
+    <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.name }}</td>
+    <td>{{ v.email }}&nbsp;</td>
+    <td>{{ v.contact }}&nbsp;</td>
+    <td><img src="{{ v.image }}" width="100" height="100" alt=""/>&nbsp;</td>
+
+    <td>{{ v.place }}</td>
+    <td>{{ v.year }}</td>
+    <td><a href="/edit_student/{{ v.id }}#aaa" class="btn btn-outline-danger">Update</a><br><br>
+    <a href="/delete_student/{{ v.id }}" onclick="return confirm('Are you sure?')" class="btn btn-outline-dark">Delete</a><br><br>
+    <a href="/view_program_request/{{ v.id }}#aaa" class="btn btn-outline-danger">View Program Request</a><br><br>
+    <a href="/staff_view_result/{{ v.id }}#aaa" class="btn btn-outline-danger">View Result</a><br><br>
+         <td> <a href="/staff_view_point/{{ v.id }}#aaa" class="btn btn-outline-danger">view points</a></td>
+
+
+    </td>
+
+  </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,132 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<form id="form1" name="form1" method="post" action="/logpost">#}
+{#  <table width="200" border="1">#}
+{#    <tr>#}
+{#      <th scope="row">Usernsame</th>#}
+{#      <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">password</th>#}
+{#      <td><label for="textfield2"></label>#}
+{#      <input type="text" name="textfield2" id="textfield2" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><input type="submit" name="LOGIN" id="LOGIN" value="LOGIN" />#}
+{#      <a href="/register_company ">register</a> <br>#}
+{#      <a href="/register_student">student_register</a>#}
+{#      </th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Fest Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            background: linear-gradient(120deg, #ff6a00, #ee0979);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            animation: bg-animation 5s infinite alternate;
+        }
+
+        @keyframes bg-animation {
+            0% { background: linear-gradient(120deg, #ff6a00, #ee0979); }
+            100% { background: linear-gradient(120deg, #ee0979, #ff6a00); }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+            animation: pop-in 0.5s ease-out;
+        }
+
+        @keyframes pop-in {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #e75b1e;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        input, .login-btn {
+            width: calc(100% - 20px);
+            padding: 14px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            transition: 0.3s;
+            text-align: center;
+            background: #f8f8f8;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            background: white;
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, #ff3d00, #e75b1e);
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(45deg, #e75b1e, #ff3d00);
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form action="/logpost" method="POST">
+            <input type="text" name="textfield" placeholder="Username" required>
+            <input type="password" name="textfield2" placeholder="Password" required>
+            <button type="submit" class="login-btn">Login</button>
+
+            <a href="/register_eventorganiser">Event Organiser Signup</a>
+        </form>
+    </div>
+</body>
+</html>

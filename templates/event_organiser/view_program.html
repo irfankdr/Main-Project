@@ -1,0 +1,53 @@
+{% extends "event_organiser/organiser_index.html" %}
+{% block body %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+</head>
+
+<body><form action="" method="get"></form>
+<table border="1"  class="table table-bordered">
+  <tr style="color: white;background-color: #f82249">
+    <th scope="col">SL.NO</th>
+    <th scope="col">START TIME</th>
+    <th scope="col">END TIME</th>
+    <th scope="col">NAME</th>
+    <th scope="col">DESCRIPTION</th>
+    <th scope="col">CATEGORY</th>
+    <th scope="col">ROUNDS</th>
+    <th scope="col">DATE</th>
+    <th scope="col">STAGE NO</th>
+    <th scope="col">STAGE LOCATION</th>
+    <th scope="col">DATE</th>
+    <th scope="col">ACTIONS</th>
+  </tr>
+    {% for v in data %}
+  <tr>
+    <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.start_time }}</td>
+    <td>{{ v.end_time }}&nbsp;</td>
+    <td>{{ v.name }}&nbsp;</td>
+    <td>{{ v.description }}&nbsp;</td>
+
+    <td>{{ v.category }}</td>
+    <td>{{ v.rounds }}</td>
+    <td>{{ v.date }}</td>
+    <td>{{ v.stage_no }}</td>
+    <td><a href="https://www.google.com/maps/?q={{ v.stage_latitude }},{{ v.stage_longitude }}">Track</a> </td>
+
+    <td><a href="/edit_program/{{ v.id }}#aaa" class="btn btn-outline-danger">Update</a><br><br>
+    <a href="/delete_program/{{ v.id }}" onclick="return confirm('Are you sure?')" class="btn btn-outline-dark">Delete</a>
+
+
+    </td>
+
+  </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+{% endblock %}
