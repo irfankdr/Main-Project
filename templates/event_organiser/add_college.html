@@ -32,19 +32,19 @@
       <input type="email" name="Email" id="textfield5" class="form-control" required /></td>
   </tr>
 
-  <tr>
-    <td scope="row">LATITUDE :</td>
-    <td>
-      <input type="text" name="Latitude" id="lt" class="form-control" readonly /></td>
-  </tr>
-  <tr>
-    <td scope="row">LONGITUDE :</td>
-    <td>
-      <input type="text" name="Longitude" id="lg"  class="form-control" readonly/></td>
-  </tr>
-    <tr>
-        <td id="gmap" colspan="2"></td>
-    </tr>
+{#  <tr>#}
+{#    <td scope="row">LATITUDE :</td>#}
+{#    <td>#}
+{#      <input type="text" name="Latitude" id="lt" class="form-control" readonly /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td scope="row">LONGITUDE :</td>#}
+{#    <td>#}
+{#      <input type="text" name="Longitude" id="lg"  class="form-control" readonly/></td>#}
+{#  </tr>#}
+{#    <tr>#}
+{#        <td id="gmap" colspan="2"></td>#}
+{#    </tr>#}
   <tr>
       <td colspan="2" scope="row"><div align="center"><input type="submit" name="REGISTER" id="REGISTER" value="Submit" class="btn btn-danger" /></div></td>
     </tr>
@@ -59,53 +59,53 @@ body { height: 100%; margin: 0; padding: 0 }
 #gmap { width: 100%; height: 300px; border: double; }
 </style>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&sensor=false"></script>
-<script type="text/javascript">
-var map, marker;
-initialize()
-function initialize() {
-    var myLatlng = new google.maps.LatLng(11.868536, 75.363197);
-    var myOptions = {
-        zoom: 7,
-        center: myLatlng,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    map = new google.maps.Map(document.getElementById("gmap"), myOptions);
-    marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map
-    });
-
-    google.maps.event.addListener(map, "click", function(event) {
-        var clickLat = event.latLng.lat();
-        var clickLon = event.latLng.lng();
-        document.getElementById("lt").value = clickLat.toFixed(5);
-        document.getElementById("lg").value = clickLon.toFixed(5);
-        marker.setPosition(new google.maps.LatLng(clickLat, clickLon));
-    });
-
-    GetMylocation();
-}
-
-function GetMylocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-}
-
-function showPosition(position) {
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
-    document.getElementById("lt").value = lat;
-    document.getElementById("lg").value = lon;
-
-    var myLatlng = new google.maps.LatLng(lat, lon);
-    map.setCenter(myLatlng);
-    map.setZoom(14);
-    marker.setPosition(myLatlng);
-}
-</script>
+{#<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&sensor=false"></script>#}
+{#<script type="text/javascript">#}
+{#var map, marker;#}
+{#initialize()#}
+{#function initialize() {#}
+{#    var myLatlng = new google.maps.LatLng(11.868536, 75.363197);#}
+{#    var myOptions = {#}
+{#        zoom: 7,#}
+{#        center: myLatlng,#}
+{#        mapTypeId: google.maps.MapTypeId.ROADMAP#}
+{#    }#}
+{#    map = new google.maps.Map(document.getElementById("gmap"), myOptions);#}
+{#    marker = new google.maps.Marker({#}
+{#        position: myLatlng,#}
+{#        map: map#}
+{#    });#}
+{##}
+{#    google.maps.event.addListener(map, "click", function(event) {#}
+{#        var clickLat = event.latLng.lat();#}
+{#        var clickLon = event.latLng.lng();#}
+{#        document.getElementById("lt").value = clickLat.toFixed(5);#}
+{#        document.getElementById("lg").value = clickLon.toFixed(5);#}
+{#        marker.setPosition(new google.maps.LatLng(clickLat, clickLon));#}
+{#    });#}
+{##}
+{#    GetMylocation();#}
+{#}#}
+{##}
+{#function GetMylocation() {#}
+{#    if (navigator.geolocation) {#}
+{#        navigator.geolocation.getCurrentPosition(showPosition);#}
+{#    } else {#}
+{#        alert("Geolocation is not supported by this browser.");#}
+{#    }#}
+{#}#}
+{##}
+{#function showPosition(position) {#}
+{#    var lat = position.coords.latitude;#}
+{#    var lon = position.coords.longitude;#}
+{#    document.getElementById("lt").value = lat;#}
+{#    document.getElementById("lg").value = lon;#}
+{##}
+{#    var myLatlng = new google.maps.LatLng(lat, lon);#}
+{#    map.setCenter(myLatlng);#}
+{#    map.setZoom(14);#}
+{#    marker.setPosition(myLatlng);#}
+{#}#}
+{#</script>#}
 
 {% endblock %}

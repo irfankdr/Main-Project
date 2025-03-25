@@ -36,6 +36,8 @@ def logpost(request):
             return HttpResponse("<script>alert('Login successful');window.location='/organizer_home'</script>")
         elif res.usertype == "college":
             return HttpResponse("<script>alert('Login successful');window.location='/college_home'</script>")
+        elif res.usertype == "judge":
+            return HttpResponse("<script>alert('Login successful');window.location='/judge_home'</script>")
         elif res.usertype == "staff":
             return HttpResponse("<script>alert('Login successful');window.location='/staff_home'</script>")
         else:
@@ -71,7 +73,7 @@ def viewandverifyevent(request):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "view event organizer"
-    data = event_organizer.objects.filter(LOGIN__usertype='pending')
+    data = event_organizer.objects.all()
     return render(request, "admin/view_and_verify_event.html", {"data":data})
 
 
@@ -386,7 +388,6 @@ def add_program_post(request):
     name = request.POST['textfield3']
     descr = request.POST['textarea']
     category = request.POST['textfield4']
-    rounds = request.POST['textfield5']
     stage_no = request.POST['textfield6']
     stage_lati = request.POST['textfield7']
     stage_longi = request.POST['textfield8']
@@ -402,7 +403,7 @@ def add_program_post(request):
         obj.name = name
         obj.description = descr
         obj.category = category
-        obj.rounds = rounds
+        # obj.rounds = rounds
         obj.stage_no = stage_no
         obj.stage_latitude = stage_lati
         obj.stage_longitude = stage_longi
@@ -452,59 +453,71 @@ def delete_program(request,id):
 # ---- MANAGE EVENT -----
 
 
-def add_event(request,id):
+def add_event(request):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "add event"
-    return render(request,"event_organiser/add_event.html",{"id":id})
+    a=judge.objects.all()
+    return render(request,"event_organiser/add_event.html",{"data":a})
 
 
-def add_event_post(request,id):
+def add_event_post(request):
     start_time = request.POST['textfield']
-    en_time = request.POST['textfield2']
+    end_time = request.POST['textfield2']
     name = request.POST['textfield3']
     descr = request.POST['textarea']
     category = request.POST['textfield4']
+    v = request.POST['v']
 
     obj = event()
     obj.start_time = start_time
-    obj.end_time = en_time
+    obj.end_time = end_time
     obj.status = "pending"
     obj.name = name
     obj.description = descr
     obj.category = category
-    obj.JUDGE_id = id
+    obj.venue = v
+    # obj.JUDGE_id = id
     obj.EVENT_ORGANIZER = event_organizer.objects.get(LOGIN=request.session['lid'])
     obj.save()
-    return HttpResponse("<script>alert('Success');window.location='/add_event/"+id+"'</script>")
+    return HttpResponse("<script>alert('Success');window.location='/add_event'</script>")
 
-def view_event(request,id):
+def view_event(request):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "view event"
-    data = event.objects.filter(EVENT_ORGANIZER__LOGIN=request.session['lid'],JUDGE_id=id)
+    data = event.objects.filter(EVENT_ORGANIZER__LOGIN=request.session['lid'])
     return render(request,"event_organiser/view_event.html",{"data":data})
 
 def edit_event(request,id):
-    if "lid" not in request.session:
-        return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
-    request.session['head'] = "Edit event"
-    data = event.objects.get(id=id)
-    return render(request,"event_organiser/edit_event.html",{"data":data,"id":id})
+    request.session['eid']=id
+    a=event.objects.get(id=id)
+    return render(request,"event_organiser/edit_event.html",{"data":a})
 
 
-def edit_event_post(request,id):
+def edit_event_post(request):
     start_time = request.POST['textfield']
-    en_time = request.POST['textfield2']
+    end_time = request.POST['textfield2']
     name = request.POST['textfield3']
     descr = request.POST['textarea']
     category = request.POST['textfield4']
-    event.objects.filter(id=id).update(start_time = start_time,end_time = en_time,name = name,description = descr,category = category)
-    return HttpResponse("<script>alert('Updated');window.location='/view_event/"+id+"'</script>")
+
+    obj = event.objects.get(id= request.session['eid'])
+    obj.start_time = start_time
+    obj.end_time = end_time
+    obj.status = "pending"
+    obj.name = name
+    obj.description = descr
+    obj.category = category
+    # obj.JUDGE_id = id
+    obj.EVENT_ORGANIZER = event_organizer.objects.get(LOGIN=request.session['lid'])
+    obj.save()
+    return HttpResponse("<script>alert('Success');window.location='/add_event'</script>")
+
 
 def delete_event(request,id):
     event.objects.get(id=id).delete()
-    return HttpResponse("<script>alert('Removed');window.location='/view_event/" + id + "'</script>")
+    return HttpResponse("<script>alert('Removed');window.location='/view_event'</script>")
 
 
 

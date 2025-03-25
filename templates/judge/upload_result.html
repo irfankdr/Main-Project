@@ -15,7 +15,7 @@
       <th scope="row">Student</th>
       <td>
         <select name="select" id="select" class="form-control" required>
-            {% for i in data %}
+            {% for i in data1 %}
             <option value="{{ i.id }}">{{ i.name }}</option>
             {% endfor %}
       </select></td>
@@ -24,7 +24,7 @@
       <th scope="row">Program</th>
       <td>
         <select name="select2" id="select2" class="form-control" required>
-            {% for i in data1 %}
+            {% for i in data %}
             <option value="{{ i.id }}">{{ i.name }}</option>
             {% endfor %}
       </select></td>

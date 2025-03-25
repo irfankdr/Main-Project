@@ -1,26 +1,119 @@
 {% extends "college/collge_index.html" %}
 {% block body %}
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Assign Work</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f7f8fc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Container for the form */
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .form-container h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4A90E2;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        /* Form Elements */
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d8e0;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f5f7fa;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4A90E2;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background-color: #4A90E2;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #357ABD;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-container h1 {
+                font-size: 24px;
+            }
+
+            input[type="text"], input[type="submit"] {
+                padding: 12px;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
-<form id="form1" name="form1" method="post" action="/assign_work_post/{{ id }}">
-  <table width="200" border="1">
-    <tr>
-      <th scope="row">Work</th>
-      <td><label for="textfield"></label>
-      <input type="text" name="textfield" id="textfield" /></td>
-    </tr>
-    <tr>
-      <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Assign" /></th>
-    </tr>
-  </table>
-</form>
+    <div class="form-container">
+        <h1>Assign Work</h1>
+        <form id="form1" name="form1" method="post" action="/assign_work_post/{{ id }}">
+            <label for="textfield">Work</label>
+            <input type="text" name="textfield" id="textfield" placeholder="Enter work description here" />
+
+            <input type="submit" name="button" id="button" value="Assign" />
+        </form>
+    </div>
 </body>
 </html>
+
 {% endblock %}

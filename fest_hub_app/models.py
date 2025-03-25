@@ -13,6 +13,7 @@ class event_organizer(models.Model):
     place = models.CharField(max_length=100)
     image = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
+    venue = models.CharField(max_length=100)
     LOGIN = models.ForeignKey(login, on_delete=models.CASCADE, default=1)
 
 
@@ -62,7 +63,7 @@ class event(models.Model):
     description = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     EVENT_ORGANIZER = models.ForeignKey(event_organizer, on_delete=models.CASCADE, default=1)
-    JUDGE = models.ForeignKey(judge, on_delete=models.CASCADE, default=1)
+    # JUDGE = models.ForeignKey(judge, on_delete=models.CASCADE, default=1)
 
 
 class program(models.Model):
@@ -71,7 +72,7 @@ class program(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
-    rounds = models.CharField(max_length=100)
+    # rounds = models.CharField(max_length=100)
     date = models.CharField(max_length=100)
     stage_latitude = models.CharField(max_length=100)
     stage_longitude = models.CharField(max_length=100)
