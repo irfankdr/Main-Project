@@ -12,16 +12,19 @@
 <body><form action="" method="get"></form>
 <table border="1"  class="table table-bordered">
   <tr style="color: white;background-color: #f82249">
+
+    <th colspan="11" ><div align="center"><a href="/add_program#aaa" class="btn btn-primary">Add New</a> </div> </th>
+  </tr> <tr style="color: white;background-color: #f82249">
     <th scope="col">SL.NO</th>
     <th scope="col">START TIME</th>
     <th scope="col">END TIME</th>
     <th scope="col">NAME</th>
     <th scope="col">DESCRIPTION</th>
-    <th scope="col">CATEGORY</th>
+
     <th scope="col">DATE</th>
     <th scope="col">STAGE NO</th>
     <th scope="col">STAGE LOCATION</th>
-    <th scope="col">DATE</th>
+
     <th scope="col">ACTIONS</th>
   </tr>
     {% for v in data %}
@@ -32,8 +35,7 @@
     <td>{{ v.name }}&nbsp;</td>
     <td>{{ v.description }}&nbsp;</td>
 
-    <td>{{ v.category }}</td>
-    <td>{{ v.rounds }}</td>
+
     <td>{{ v.date }}</td>
     <td>{{ v.stage_no }}</td>
     <td><a href="https://www.google.com/maps/?q={{ v.stage_latitude }},{{ v.stage_longitude }}">Track</a> </td>

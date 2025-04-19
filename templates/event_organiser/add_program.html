@@ -14,7 +14,16 @@
       <tr>
       <th scope="row">Date</th>
       <td>
-      <input type="date" name="textfield" id="textfield" class="form-control" required /></td>
+     <input
+  type="date"
+  name="date"
+  id="textfield"
+  class="form-control"
+  min="{{ fdate }}"
+  max="{{ tdate }}"
+  required
+/>
+
     </tr>
     <tr>
       <th scope="row">Starttime</th>

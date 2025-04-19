@@ -57,27 +57,33 @@ class judge(models.Model):
 
 class event(models.Model):
     start_time = models.CharField(max_length=100)
+    start_date = models.DateField()
+    end_date = models.DateField()
     end_time = models.CharField(max_length=100)
     status = models.CharField(max_length=100)       # ongoing,schedules,ongoing,completed
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
+    venue = models.CharField(max_length=100)
+
     EVENT_ORGANIZER = models.ForeignKey(event_organizer, on_delete=models.CASCADE, default=1)
     # JUDGE = models.ForeignKey(judge, on_delete=models.CASCADE, default=1)
 
 
 class program(models.Model):
-    start_time = models.CharField(max_length=100)
-    end_time = models.CharField(max_length=100)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     # rounds = models.CharField(max_length=100)
+
     date = models.CharField(max_length=100)
     stage_latitude = models.CharField(max_length=100)
     stage_longitude = models.CharField(max_length=100)
     stage_no = models.CharField(max_length=100)
-    EVENT_ORGANIZER = models.ForeignKey(event_organizer, on_delete=models.CASCADE, default=1)
+    EVENT_ORGANIZER = models.ForeignKey(event, on_delete=models.CASCADE, default=1)
+
 
 class student(models.Model):
     name = models.CharField(max_length=100)
@@ -92,7 +98,8 @@ class student(models.Model):
 
 
 class result(models.Model):
-    result = models.CharField(max_length=100)
+    result = models.CharField(max_length=30)
+    grade = models.CharField(max_length=30)
     PROGRAM = models.ForeignKey(program, on_delete=models.CASCADE, default=1)
     STUDENT = models.ForeignKey(student, on_delete=models.CASCADE, default=1)
     JUDGE = models.ForeignKey(judge, on_delete=models.CASCADE, default=1)

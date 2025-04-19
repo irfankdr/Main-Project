@@ -12,6 +12,32 @@ from .models import *
 import base64
 # Create your views here.
 
+
+
+from datetime import datetime
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from web3 import Web3, HTTPProvider, contract
+import qrcode
+import json
+# truffle development blockchain address
+blockchain_address = 'http://127.0.0.1:7545'
+# Client instance to interact with the blockchain
+web3 = Web3(HTTPProvider(blockchain_address))
+# Set the default account (so we don't need to set the "from" for every transaction call)
+web3.eth.defaultAccount = web3.eth.accounts[0]
+compiled_contract_path = r"C:\BlockChain\node_modules\.bin\build\contracts\Structreq.json"
+# Deployed contract address (see migrate command output: contract address)
+deployed_contract_address = '0xC2e70C40bb23b55e44245FD6d650D71f68711844'
+
+
+
+
+
+
+
+
 festhub_email = ""
 festhub_password = ""
 
@@ -166,10 +192,10 @@ def register_eventorganiser_post(request):
     contact = request.POST['textfield3']
     place = request.POST['textfield7']
     image = request.FILES['fileField']
-    dt = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    dt = datetime.now().strftime("%Y%m%d-%H%M%S")
     fs = FileSystemStorage()
-    fs.save(r"C:\Users\irfan vk\Downloads\Fest_Hub\Fest_Hub\media\image\\"+dt+'.jpg',image)
-    # fs.save(r"C:\Users\irfan vk\Downloads\Fest_Hub\\",image)
+    fs.save(r"C:\Users\irfan vk\PycharmProjects\Fest_Hub\media\image\\"+dt+'.jpg',image)
+    #  fs.save(r"C:\Users\irfan vk\Downloads\Fest_Hub\\",image)
     path = '/media/image/'+dt+'.jpg'
     designation = request.POST['textfield4']
     password = request.POST['textfield5']
@@ -214,8 +240,8 @@ def add_college_post(request):
     place = request.POST['place']
     phone = request.POST['phone']
     Email = request.POST['Email']
-    Latitude = request.POST['Latitude']
-    Longitude = request.POST['Longitude']
+    # Latitude = request.POST['Latitude']
+    # Longitude = request.POST['Longitude']
 
     data = login.objects.filter(username=Email)
     if data.exists():
@@ -234,9 +260,10 @@ def add_college_post(request):
         obj.place = place
         obj.contact = phone
         obj.email = Email
+        obj.EVENT_ORGANIZER = event_organizer.objects.get(LOGIN__id=request.session['lid'])
 
-        obj.latitude = Latitude
-        obj.longitude = Longitude
+        obj.latitude = "0.0"
+        obj.longitude = "0.0"
         obj.LOGIN_id = obj1.id
         obj.save()
 
@@ -253,6 +280,8 @@ def add_college_post(request):
         # s.send_message(msg)
 
         return HttpResponse("<script>alert('Success');window.location='/add_college'</script>")
+
+
 
 def view_college(request):
     if "lid" not in request.session:
@@ -379,13 +408,20 @@ def add_program(request):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "Add Program"
-    return render(request,"event_organiser/add_program.html")
+    ev = event.objects.get(id=request.session['eid'])
+    fdate=ev.start_date
+    tdate=ev.end_date
+    return render(request,"event_organiser/add_program.html",{"fdate":str(fdate),"tdate":str(tdate)})
+
+
+
 
 
 def add_program_post(request):
     start_time = request.POST['textfield']
     end_time = request.POST['textfield2']
     name = request.POST['textfield3']
+    date = request.POST['date']
     descr = request.POST['textarea']
     category = request.POST['textfield4']
     stage_no = request.POST['textfield6']
@@ -407,16 +443,16 @@ def add_program_post(request):
         obj.stage_no = stage_no
         obj.stage_latitude = stage_lati
         obj.stage_longitude = stage_longi
-        obj.date = datetime.datetime.now().date()
-        obj.EVENT_ORGANIZER = event_organizer.objects.get(LOGIN=request.session['lid'])
+        obj.date = date
+        obj.EVENT_ORGANIZER = event.objects.get(id=request.session['eid'])
         obj.save()
         return HttpResponse("<script>alert('Updated');window.location='/add_program'</script>")
 
-def view_program(request):
+def view_program(request,id):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
-    request.session['head'] = "view Program"
-    data = program.objects.filter(EVENT_ORGANIZER__LOGIN=request.session['lid'])
+    data = program.objects.filter(EVENT_ORGANIZER__id=id)
+    request.session["eid"]=id
     return render(request,"event_organiser/view_program.html",{"data":data})
 
 
@@ -426,7 +462,7 @@ def edit_program(request,id):
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "Edit Program"
     data = program.objects.get(id=id)
-    return render(request,"event_organiser/Hm.html",{"data":data,"id":id})
+    return render(request,"event_organiser/edit_program.html",{"data":data,"id":id})
 
 
 def edit_program_post(request,id):
@@ -435,14 +471,14 @@ def edit_program_post(request,id):
     name = request.POST['textfield3']
     descr = request.POST['textarea']
     category = request.POST['textfield4']
-    rounds = request.POST['textfield5']
-    date = request.POST['textfield6']
+
+    date = request.POST['date']
     stage_no = request.POST['textfield6']
     stage_lati = request.POST['textfield7']
     stage_longi = request.POST['textfield8']
 
     program.objects.filter(id=id).update(start_time = start_time,end_time = end_time,name = name,
-                                         description = descr,category = category,rounds = rounds,date=date,stage_no=stage_no,stage_latitude=stage_lati,stage_longitude=stage_longi)
+                                         description = descr,category = category,date=date,stage_no=stage_no,stage_latitude=stage_lati,stage_longitude=stage_longi)
     return HttpResponse("<script>alert('Updated');window.location='/view_program'</script>")
 
 def delete_program(request,id):
@@ -462,6 +498,8 @@ def add_event(request):
 
 
 def add_event_post(request):
+    start_date = request.POST['sdate']
+    end_date = request.POST['edate']
     start_time = request.POST['textfield']
     end_time = request.POST['textfield2']
     name = request.POST['textfield3']
@@ -470,6 +508,8 @@ def add_event_post(request):
     v = request.POST['v']
 
     obj = event()
+    obj.start_date =start_date
+    obj.end_date = end_date
     obj.start_time = start_time
     obj.end_time = end_time
     obj.status = "pending"
@@ -488,6 +528,18 @@ def view_event(request):
     request.session['head'] = "view event"
     data = event.objects.filter(EVENT_ORGANIZER__LOGIN=request.session['lid'])
     return render(request,"event_organiser/view_event.html",{"data":data})
+
+
+def view_event_allocation(request,id):
+    if "lid" not in request.session:
+        return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
+    request.session['jud_id'] =id
+    request.session['head'] = "view event"
+    data = event.objects.all()
+    return render(request,"event_organiser/allocate_judge.html",{"data":data})
+
+
+
 
 def edit_event(request,id):
     request.session['eid']=id
@@ -525,18 +577,19 @@ def allocate_programs(request,id):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "allocate program"
-    data = program.objects.filter(EVENT_ORGANIZER__LOGIN=request.session['lid'])
+    data = program.objects.filter(EVENT_ORGANIZER__EVENT_ORGANIZER__LOGIN=request.session['lid'],EVENT_ORGANIZER__id=id)
     return render(request,"event_organiser/allocate_program.html",{"data":data,"id":id})
 
-def allocate_program_post(request,id):
+def allocate_program_post(request):
     programs = request.POST['select']
-    data = allocate_program.objects.filter(PROGRAM_id = programs,JUDGE_id = id)
+    print(request.session['jud_id'],"jjjjjjjjjjjjjjjjj")
+    data = allocate_program.objects.filter(PROGRAM_id = programs,JUDGE_id = request.session['jud_id'])
     if data.exists():
         return HttpResponse("<script>alert('Program already allocated');window.location='/view_judge'</script>")
     else:
         obj = allocate_program()
         obj.PROGRAM_id = programs
-        obj.JUDGE_id = id
+        obj.JUDGE = judge.objects.get(id=request.session['jud_id'])
         obj.save()
         return HttpResponse("<script>alert('Program allocated');window.location='/view_judge'</script>")
 
@@ -654,12 +707,19 @@ def college_view_event(request):
     return render(request,"college/view_event.html",{"data":data})
 
 
-def college_view_program(request):
+
+
+
+def college_view_program(request,id):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "view program"
-    data  = program.objects.all()
+    data  = program.objects.filter(EVENT_ORGANIZER__id=id)
     return render(request,"college/view_program.html",{"data":data})
+
+
+
+
 
 def view_result(request,id):
     if "lid" not in request.session:
@@ -783,6 +843,15 @@ def view_student(request):
     request.session['head'] = "view student"
     data = student.objects.filter(STAFF__LOGIN=request.session['lid'])
     return render(request, "staff/view_student.html", {"data":data})
+
+
+def add_result(request,id):
+    if "lid" not in request.session:
+        return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
+    request.session['pid']=id
+    ob=program_request.objects.filter(PROGRAM__id=id)
+
+    return render(request, "judge/upload_result1.html", {"data":ob})
 
 
 def edit_student(request,id):
@@ -913,36 +982,49 @@ def upload_result(request):
     if "lid" not in request.session:
         return HttpResponse("<script>alert('Session Expired');window.location='/'</script>")
     request.session['head'] = "Upload result"
-    data = program.objects.all()
-    data1 = student.objects.all()
-    return render(request,"judge/upload_result.html",{"data":data,"data1":data1})
+    data = allocate_program.objects.filter(JUDGE__LOGIN__id=request.session['lid'])
+
+    return render(request,"judge/upload_result.html",{"data":data})
 
 def upload_result_post(request):
-    # results = request.FILES['fileField']
-    programs = request.POST['select2']
-    students = request.POST['select']
-    # dt = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    # fs = FileSystemStorage()
-    # fs.save(r"C:\Users\DELL\PycharmProjects\Fest_Hub\media\\" + dt + '.pdf', results)
-    # path = '/media/' + dt + '.pdf'
+    id=request.session['pid']
+    ob = program_request.objects.filter(PROGRAM__id=id)
+    for i in ob:
+        obj = result()
+        obj.STUDENT_id =i.STUDENT.id
+        obj.PROGRAM_id = id
+        obj.JUDGE = judge.objects.get(LOGIN=request.session['lid'])
+        obj.result =  request.POST["p"+str(i.STUDENT.id)]
+        obj.grade =  request.POST[str(i.STUDENT.id)]
+        obj.save()
+        # blocknumber = web3.eth.get_block_number()
+        # # try:
+        # message2 = contract.functions.addreq(blocknumber + 1,
+        #                                      str(obj.result), str(obj.grade), str(obj.PROGRAM_id.id), str(obj.STUDENT_id.id), str(obj.JUDGE.id),
+        #                                      str(obj.id), 'shop request'
+        #                                      ).transact({'from': web3.eth.accounts[0]})
+        # # except Exception as e:
+        # #     print(e, "========================================")
+        # #     print(e, "========================================")
+        # #     print(e, "")
+        # #
+        k=obj.PROGRAM_id
+        s=obj.STUDENT_id
+        j=obj.JUDGE.id
+        with open(
+                r'C:\BlockChain\node_modules\.bin\build\contracts\Structreq.json') as file:
+            contract_json = json.load(file)  # load contract info as JSON
+            contract_abi = contract_json['abi']  # fetch contract's abi - necessary to call its functions
+        contract = web3.eth.contract(address='0xC2e70C40bb23b55e44245FD6d650D71f68711844', abi=contract_abi)
+        blocknumber = web3.eth.get_block_number()
+        message2 = contract.functions.addreq(blocknumber + 1,
+                                             str(obj.result), str(obj.grade), str(k), str(s), str(j),
+                                             ).transact({"from": web3.eth.accounts[0]})
 
-    uploaded_file = request.FILES.get('fileField')
-    print(uploaded_file, "pppppppppppppppppp")
-    if uploaded_file:
-        try:
-            # Save the file in the MEDIA_ROOT directory
-            with open(f'media/uploads/{uploaded_file.name}', 'wb') as f:
-                for chunk in uploaded_file.chunks():
-                    f.write(chunk)
-        except Exception as e:
-            pass
+        # data = {'task': 'success'}
+        # r = json.dumps(data)
+        # return HttpResponse(r)
 
-    obj = result()
-    obj.STUDENT_id = students
-    obj.PROGRAM_id = programs
-    obj.JUDGE = judge.objects.get(LOGIN=request.session['lid'])
-    obj.result = f'media/uploads/{uploaded_file.name}'
-    obj.save()
     return HttpResponse("<script>alert('result uploaded');window.location='/upload_result'</script>")
 
 
@@ -962,19 +1044,18 @@ def student_login(request):
 
 def student_view_profile(request):
     lid=request.POST['lid']
-    print("pvvvvvliddddddddddddddd",lid)
     data = student.objects.get(LOGIN=lid)
-    # print("imageeeeeeeeeee",data.image)
+
 
     return JsonResponse({
-        "id": data.id,
-        "Name": data.name,
-        "phone": data.contact,
-        "year": data.year,
-        "place":data.place,
-        "department": data.department,
-        "photo": data.image,
-        "Email": data.email
+        "id": str(data.id),
+        "Name": str(data.name),
+        "phone": str(data.contact),
+        "year": str(data.year),
+        "place":str(data.place),
+        "department": str(data.department),
+        "photo": str(data.image),
+        "Email": str(data.email)
     })
 
 
@@ -986,6 +1067,7 @@ def student_view_event(request):
             "id": i.id,
             "start_time": i.start_time,
             "end_time": i.end_time,
+            "date": i.start_date,
             "status": i.status,
             "name": i.name,
             "description": i.description,
@@ -998,9 +1080,20 @@ def student_view_event(request):
 
 
 def student_view_program(request):
-    res = program.objects.all()
+    eid=request.POST["eid"]
+    res = program.objects.filter(EVENT_ORGANIZER__id=eid)
     ar = []
     for i in res:
+        # start_time = models.CharField(max_length=100)
+        # end_time = models.CharField(max_length=100)
+        # name = models.CharField(max_length=100)
+        # description = models.CharField(max_length=100)
+        # category = models.CharField(max_length=100)
+        # # rounds = models.CharField(max_length=100)
+        # date = models.CharField(max_length=100)
+        # stage_latitude = models.CharField(max_length=100)
+        # stage_longitude = models.CharField(max_length=100)
+        # stage_no = models.CharField(max_length=100)
         ar.append({
             "id": i.id,
             "start_time": i.start_time,
@@ -1008,11 +1101,35 @@ def student_view_program(request):
             "name": i.name,
             "description": i.description,
             "category": i.category,
-            "rounds": i.rounds,
+            "rounds": "",
             "date": i.date,
             "stage_no":i.stage_no,
             "stage_lati":i.stage_latitude,
             "stage_longi":i.stage_longitude
+
+        })
+    print(ar)
+    return JsonResponse({"status": "ok", "data": ar})
+
+
+def student_view_program_req(request):
+    eid=request.POST["lid"]
+    res = program_request.objects.filter(STUDENT__LOGIN__id=eid)
+    ar = []
+    for i in res:
+
+        ar.append({
+            "id": i.id,
+            "start_time": i.PROGRAM.start_time,
+            "end_time": i.PROGRAM.end_time,
+            "name": i.PROGRAM.name,
+            "description": i.PROGRAM.description,
+            "category": i.PROGRAM.category,
+            "rounds": "",
+            "date": i.PROGRAM.date,
+            "stage_no":i.PROGRAM.stage_no,
+            "stage_lati":i.PROGRAM.stage_latitude,
+            "stage_longi":i.status
 
         })
     return JsonResponse({"status": "ok", "data": ar})
@@ -1028,7 +1145,7 @@ def student_send_request(request):
 
     obj = program_request()
     obj.status = 'pending'
-    obj.date = datetime.datetime.now().date()
+    obj.date = datetime.now().date()
     obj.PROGRAM_id = pid
     obj.STUDENT = student.objects.get(LOGIN=lid)
     obj.save()
@@ -1056,12 +1173,57 @@ def student_view_result(request):
         ar.append(
             {
                 "id":i.id,
-                "result":i.result,
+                "result":i.result+ " - "+i.grade,
                 "program_name":i.PROGRAM.name,
-                "program_category":i.PROGRAM.category,
+                "program_category":i.JUDGE.name,
                 "program_date":i.PROGRAM.date,
                 "organiser_name":i.PROGRAM.EVENT_ORGANIZER.name
             }
         )
         print("arrrrrrrrrrrrrrrrrrrrr",ar)
     return JsonResponse({"status":"ok","data":ar})
+
+def updatelocation(request):
+    lid = request.POST['lid']
+    res=get_upcoming_programs_for_user(lid)
+    print(res)
+    if len(res)>0:
+        return JsonResponse({"task":"ok","data":"Sample"})
+    return JsonResponse({"task":"na","data":"Sample"})
+
+
+
+from .models import program, program_request
+import pytz
+
+# Set your local timezone (replace 'Your/Timezone' with the actual timezone)
+
+def get_upcoming_programs_for_user(user):
+    from django.utils import timezone
+    from datetime import timedelta
+    local_tz = pytz.timezone('Asia/Kolkata')
+    # Get the current time
+    current_time = timezone.now()
+    current_time_utc = timezone.now()
+
+    # Convert the current time to local timezone
+    current_time_local = current_time_utc.astimezone(local_tz)
+
+    # Calculate the time 5 minutes from now in local timezone
+    five_minutes_later = current_time_local + timedelta(minutes=5)
+    # Calculate the time 5 minutes from now
+    # five_minutes_later = current_time + timedelta(minutes=5)
+    four_minutes_later = current_time + timedelta(minutes=4)
+    print(five_minutes_later)
+    print(four_minutes_later)
+
+    # Filter programs that start within the next 5 minutes for the given user
+    upcoming_programs = program.objects.filter(
+        date=datetime.now().strftime("%Y-%m-%d"),
+        start_time__hour=five_minutes_later.hour,
+        start_time__minute=five_minutes_later.minute,
+
+        program_request__STUDENT__LOGIN__id=user
+    )
+
+    return upcoming_programs

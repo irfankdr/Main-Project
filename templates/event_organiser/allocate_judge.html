@@ -1,4 +1,4 @@
-{% extends "admin/admin_index.html" %}
+{% extends "event_organiser/organiser_index.html" %}
 {% block body %}
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,26 +13,34 @@
 <table border="1"  class="table table-bordered">
   <tr style="color: white;background-color: #f82249">
     <th scope="col">SL.NO</th>
+    <th scope="col">START DATE</th>
+    <th scope="col">END DATE</th>
     <th scope="col">START TIME</th>
     <th scope="col">END TIME</th>
+    <th scope="col">VENUE</th>
     <th scope="col">NAME</th>
     <th scope="col">DESCRIPTION</th>
     <th scope="col">CATEGORY</th>
-    <th scope="col">DATE</th>
-
+    <th scope="col">ACTIONS</th>
   </tr>
     {% for v in data %}
   <tr>
     <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.start_date }}</td>
+    <td> {{ v.end_date }}</td>
     <td> {{ v.start_time }}</td>
     <td>{{ v.end_time }}&nbsp;</td>
+    <td>{{ v.venue }}&nbsp;</td>
     <td>{{ v.name }}&nbsp;</td>
     <td>{{ v.description }}&nbsp;</td>
+
     <td>{{ v.category }}</td>
-    <td>{{ v.date }}</td>
+
+    <td>
+        <a href="/allocate_programs/{{ v.id }}#aaa" class="btn btn-outline-dark">allocate_programs</a><br><br>
 
 
-
+    </td>
 
   </tr>
     {% endfor %}

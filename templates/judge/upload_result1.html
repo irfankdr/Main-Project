@@ -1,0 +1,51 @@
+{% extends "judge/judge_index.html" %}
+{% block body %}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h4>Upload Results</h4>
+        </div>
+        <div class="card-body">
+            <form action="/upload_result_post" method="post" enctype="multipart/form-data" name="form1" id="form1">
+                <table class="table table-bordered table-striped text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Grade</th>
+                            <th>Position</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in data %}
+                        <tr>
+                            <td>{{ i.STUDENT.name }}</td>
+                            <td>
+                                <select name="{{ i.STUDENT.id }}" class="form-select">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="p{{ i.STUDENT.id }}" class="form-select">
+                                    <option value="1st">1st</option>
+                                    <option value="2nd">2nd</option>
+                                    <option value="3rd">3rd</option>
+                                    <option value="No Prize">No Prize</option>
+                                </select>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-success px-4">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

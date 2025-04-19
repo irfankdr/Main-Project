@@ -13,25 +13,26 @@
 <table border="1"  class="table table-bordered">
   <tr style="color: white;background-color: #f82249">
     <th scope="col">SL.NO</th>
+    <th scope="col">START DATE</th>
+    <th scope="col">END DATE</th>
     <th scope="col">START TIME</th>
     <th scope="col">END TIME</th>
     <th scope="col">NAME</th>
     <th scope="col">DESCRIPTION</th>
     <th scope="col">CATEGORY</th>
-    <th scope="col">DATE</th>
     <th scope="col">ACTIONS</th>
   </tr>
     {% for v in data %}
   <tr>
     <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.EVENT_ORGANIZER.start_date }}</td>
+    <td>{{ v.EVENT_ORGANIZER.end_date }}&nbsp;</td>
     <td> {{ v.start_time }}</td>
     <td>{{ v.end_time }}&nbsp;</td>
     <td>{{ v.name }}&nbsp;</td>
     <td>{{ v.description }}&nbsp;</td>
+      <td>{{ v.category }}</td>
 
-    <td>{{ v.category }}</td>
-    <td>{{ v.rounds }}</td>
-    <td>{{ v.date }}</td>
 
     <td><a href="/view_result/{{ v.id }}#aaa"class="btn btn-outline-danger">View Result</a><br>
 

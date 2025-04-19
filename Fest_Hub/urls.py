@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
 from fest_hub_app import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -55,12 +54,12 @@ urlpatterns = [
     path('delete_event/<id>',views.delete_event),
     path('add_program',views.add_program),
     path('add_program_post',views.add_program_post),
-    path('view_program',views.view_program),
+    path('view_program/<id>',views.view_program),
     path('edit_program/<id>',views.edit_program),
     path('edit_program_post/<id>',views.edit_program_post),
     path('delete_program/<id>',views.delete_program),
     path('allocate_programs/<id>',views.allocate_programs),
-    path('allocate_program_post/<id>',views.allocate_program_post),
+    path('allocate_program_post',views.allocate_program_post),
 
 
 # ------------------------ ADMIN ------------------------------
@@ -89,7 +88,7 @@ urlpatterns = [
     path('edit_staff_post/<id>',views.edit_staff_post),
     path('delete_staff/<id>',views.delete_staff),
     path('college_view_event',views.college_view_event),
-    path('college_view_program',views.college_view_program),
+    path('college_view_program/<int:id>',views.college_view_program),
     path('assign_works/<id>',views.assign_works),
     path('assign_work_post/<id>',views.assign_work_post),
     path('view_staff_work_status/<id>',views.view_staff_work_status),
@@ -115,6 +114,7 @@ urlpatterns = [
     path('send_notification',views.send_notification),
     path('send_notification_post',views.send_notification_post),
     path('update_student_request/<id>',views.update_student_request),
+    path('view_event_allocation/<id>',views.view_event_allocation),
 
 
 # ---------------------------- JUDGE -------------------------------
@@ -123,6 +123,7 @@ urlpatterns = [
     path('judge_view_assigned_work',views.judge_view_assigned_work),
     path('upload_result',views.upload_result),
     path('upload_result_post',views.upload_result_post),
+    path('add_result/<id>',views.add_result),
 
 
 # ---------------------------- STUDENT -------------------------------
@@ -133,5 +134,7 @@ urlpatterns = [
     path('student_send_request',views.student_send_request),
     path('student_view_notification',views.student_view_notification),
     path('student_view_result',views.student_view_result),
+    path('student_view_program_req',views.student_view_program_req),
+    path('updatelocation',views.updatelocation),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

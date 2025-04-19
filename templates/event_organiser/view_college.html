@@ -16,7 +16,7 @@
     <th scope="col">EMAIL</th>
     <th scope="col">CONTACT</th>
     <th scope="col">PLACE</th>
-    <th scope="col">LOCATION</th>
+{#    <th scope="col">LOCATION</th>#}
     <th scope="col">ACTIONS</th>
   </tr>
     {% for v in data %}
@@ -27,7 +27,7 @@
     <td>{{ v.contact }}&nbsp;</td>
 
     <td>{{ v.place }}</td>
-    <td><a href="https://www.google.com/maps/?q={{ v.latitude }},{{ v.longitude }}" class="btn btn-outline-dark">Track</a></td>
+{#    <td><a href="https://www.google.com/maps/?q={{ v.latitude }},{{ v.longitude }}" class="btn btn-outline-dark">Track</a></td>#}
     <td><a href="/edit_college/{{ v.id }}#aaa" class="btn btn-outline-dark">Update</a><br><br>
     <a href="/delete_college/{{ v.id }}" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a>
 

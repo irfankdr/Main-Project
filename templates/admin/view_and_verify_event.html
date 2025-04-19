@@ -30,11 +30,11 @@
       <td>{{ i.place }}</td>
     <td>&nbsp;{{ i.designation }}</td>
     <td>
-        {%   if i.LOGIN.type == 'pending' %}
+        {%   if i.LOGIN.usertype == 'pending' %}
     <p><a href="/approve_event_organizer/{{ i.LOGIN.id }}" class="btn btn-success" onclick="return confirm('Are you sure?')">APPROVE</a></p>
     <p><a href="/reject_organizer/{{ i.LOGIN.id }}" class="btn btn-danger" onclick="return confirm('Are you sure?')" >REJECT</a></p></td>
   {% else %}
-  {{ i.LOGIN.type }}
+  {{ i.LOGIN.usertype }}
   {% endif %}
   </tr>
     {% endfor %}

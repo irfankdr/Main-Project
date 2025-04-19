@@ -12,6 +12,8 @@
 <table border="1"  class="table table-bordered">
   <tr style="color: white;background-color: #f82249">
     <th scope="col">SL.NO</th>
+    <th scope="col">START DATE</th>
+    <th scope="col">END DATE</th>
     <th scope="col">START TIME</th>
     <th scope="col">END TIME</th>
     <th scope="col">NAME</th>
@@ -22,6 +24,8 @@
     {% for v in data %}
   <tr>
     <td>{{ forloop.counter }}&nbsp;</td>
+    <td> {{ v.start_date }}</td>
+    <td>{{ v.end_date }}&nbsp;</td>
     <td> {{ v.start_time }}</td>
     <td>{{ v.end_time }}&nbsp;</td>
     <td>{{ v.name }}&nbsp;</td>
@@ -29,7 +33,7 @@
 
     <td>{{ v.category }}</td>
 
-
+<td><a href="college_view_program/{{ v.id }}">PROGRAM</a> </td>
   </tr>
     {% endfor %}
 </table>
